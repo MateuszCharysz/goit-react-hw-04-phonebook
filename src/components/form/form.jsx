@@ -4,7 +4,7 @@ import css from './Form.module.css';
 import Input from 'components/input/input';
 import Button from 'components/button/button';
 
-export class Form extends Component {
+export class Form extends Component { //TODO zmiana na use state use efect
   state = {
     name: '',
     number: '',

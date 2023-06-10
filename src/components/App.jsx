@@ -47,10 +47,10 @@ export const App = () => {
   // useEffect((key = 'contacts') => {
   //   if (localStorage.getItem(key) !== null) {
   //     const lsState = JsLocalStorage.load(key);
-  //     console.log(lsState);
-  //     console.log(localStorage.getItem(key));
+  //     // console.log(lsState);
+  //     // console.log(localStorage.getItem(key));
   //     setContacts([...lsState]);
-  //     console.log('onMOunt'); //TODO do usuniecia
+  //     console.log('onMOunt update contact not null'); //TODO do usuniecia
   //   }
   // }, []);
 
@@ -58,18 +58,18 @@ export const App = () => {
     (key = 'contacts') => {
       // console.log(JSON.stringify(JsLocalStorage.load(key)));
       // console.log(JSON.stringify(contacts));
-      console.log(JSON.stringify(JsLocalStorage.load(key)) !== JSON.stringify(contacts));
+      console.log(
+        JSON.stringify(JsLocalStorage.load(key)) !== JSON.stringify(contacts),
+      );
       if (
         JSON.stringify(JsLocalStorage.load(key)) !== JSON.stringify(contacts)
       ) {
-        if (localStorage.getItem(key) !== null) {
-          const lsState = JsLocalStorage.load(key);
-          setContacts([...lsState]);
-          console.log('onupdate'); //TODO do usuniecia
-        } else {
+        if (localStorage.getItem(key) === null) {
           JsLocalStorage.save(key, contacts);
-          console.log('onMount'); //TODO do usuniecia
-
+          console.log('onUpdate save storage'); //TODO kiedy nie ma key
+        } else if (localStorage.getItem(key) !== null) {
+          
+        } else {
         }
       }
     },

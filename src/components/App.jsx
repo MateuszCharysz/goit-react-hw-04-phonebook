@@ -14,6 +14,8 @@ export const App = () => {
     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
   ]);
   const [filter, setFilter] = useState('');
+  // const lsUpdate = () => {return (JsLocalStorage.save('contacts', contacts))}
+  const [firstRun, setFirstRun] = useState(true);
 
   const filterHandler = e => {
     const { name, value } = e.target;
@@ -36,7 +38,7 @@ export const App = () => {
       contacts.filter(contact => contact.name === callback.name).length !== 1
     ) {
       let formState = { id: idCreate(), ...callback };
-      setContacts([...contacts, formState]);
+      setContacts(prevState => [...prevState, formState]);
     } else {
       alert(`${callback.name} is already in contacts.`);
     }
@@ -47,8 +49,6 @@ export const App = () => {
   // useEffect((key = 'contacts') => {
   //   if (localStorage.getItem(key) !== null) {
   //     const lsState = JsLocalStorage.load(key);
-  //     // console.log(lsState);
-  //     // console.log(localStorage.getItem(key));
   //     setContacts([...lsState]);
   //     console.log('onMOunt update contact not null'); //TODO do usuniecia
   //   }
@@ -56,24 +56,39 @@ export const App = () => {
 
   useEffect(
     (key = 'contacts') => {
-      // console.log(JSON.stringify(JsLocalStorage.load(key)));
-      // console.log(JSON.stringify(contacts));
       console.log(
         JSON.stringify(JsLocalStorage.load(key)) !== JSON.stringify(contacts),
       );
+      console.log(localStorage.getItem(key) !== null, 'null');
+      console.log(firstRun, 'firstrun');
       if (
         JSON.stringify(JsLocalStorage.load(key)) !== JSON.stringify(contacts)
       ) {
         if (localStorage.getItem(key) === null) {
           JsLocalStorage.save(key, contacts);
-          console.log('onUpdate save storage'); //TODO kiedy nie ma key
-        } else if (localStorage.getItem(key) !== null) {
-          
+          setFirstRun(false);
+          console.log('1st if'); //TODO kiedy nie ma key
+        } else if (localStorage.getItem(key) !== null && firstRun === true) {
+          // console.log(localStorage.getItem(key) !== null);
+          // console.log(firstRun);
+          const lsState = JsLocalStorage.load(key);
+          setContacts([...lsState]);
+          setFirstRun(false);
+          console.log('onMOunt update contact not null first run'); //TODO do usuniecia
+        } else if (firstRun === true) {
+          setFirstRun(false);
+          console.log('firstRun app not true ');
         } else {
+          JsLocalStorage.save(key, contacts);
+          console.log('else (onUpdate)');
         }
+      } else if (firstRun === true) {
+        setFirstRun(false);
+        console.log(firstRun);
+      } else {
       }
     },
-    [contacts],
+    [contacts, firstRun],
   );
 
   return (
